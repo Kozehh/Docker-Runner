@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Client": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SERVER_ADDR": "http://localhost:50508"
+      }
+    }
+  }
+}

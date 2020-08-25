@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+    
+    client:
+        container_name: client
+        build:
+            context: ./Orchestrus
+            dockerfile: Client/Dockerfile
+        depends_on: 
+            - dbmanager
+            - server
+            - database
+        stdin_open: true
+        tty: true
+
+    server:
+        container_name: server
+        build:
+            context: ./Orchestrus
+            dockerfile: Orchestrus/Dockerfile
+        depends_on: 
+            - dbmanager
+            - database
+        ports:
+            - "9000:80"
+
+    dbmanager:
+        container_name: dbmanager
+        build:
+            context: ./Orchestrus
+            dockerfile: DBManager/Dockerfile
+        environment:
+            MYSQL_SERVER_NAME: 'mysql'
+        links:
+            - "database"
+        ports:
+            - "9001:80"
+
+    database:
+        container_name: 'mysql'
+        image: mysql/mysql-server:latest
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'mydatabase'
+            MYSQL_USER: 'root'
+            MYSQL_PASSWORD: 'password'
+            MYSQL_ROOT_PASSWORD: 'password'
+        volumes:
+            - mysql_data:/var/lib/mysql
+        ports:
+            - '3309:3306'
+        expose:
+            - '3309'
+
+volumes:
+    mysql_data:
+
+            

@@ -1,0 +1,29 @@
+	# Visual studio folder
+Orchestrus/.vs
+
+	#Orchestrus project folders
+Orchestrus/Orchestrus/bin
+Orchestrus/Orchestrus/obj
+
+	#Client project folders
+Orchestrus/Client/bin
+Orchestrus/Client/obj
+
+	#DBManager project folders
+Orchestrus/DBManager/bin
+Orchestrus/DBManager/obj
+
+	#Worker project folders
+Orchestrus/Worker/bin
+Orchestrus/Worker/obj
+
+	#WorkerApp project folders
+Orchestrus/WorkerApp/bin
+Orchestrus/WorkerApp/obj
+
+	#Test project folders
+Orchestrus/Test/bin
+Orchestrus/Test/obj
+
+
+*.user

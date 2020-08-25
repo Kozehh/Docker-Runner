@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+    
+    workerapp:
+        container_name: workerapp
+        build:
+            context: .
+            dockerfile: WorkerApp/Dockerfile
+        ports:
+            - 9002:80

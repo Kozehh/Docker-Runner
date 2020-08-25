@@ -1,0 +1,52 @@
+stages:
+    - build
+    - codeQual
+    - tests
+
+include:
+    - template: Code-Quality.gitlab-ci.yml
+    
+Building:
+    stage: build
+    image: tiangolo/docker-with-compose
+    variables:
+        DOCKER_HOST: tcp://docker:2376
+    before_script:
+        - apk add --no-cache py-pip bash git
+        - pip install docker-compose
+    script:
+        - docker-compose build
+        - cd Orchestrus/WorkerApp
+        - docker-compose build
+        - cd -
+        - cd Orchestrus/Test
+        - dotnet build Test.csproj
+
+    artifacts:
+        paths:
+            - Orchestrus/Client/bin/Debug/netcoreapp3.1/Client
+            - Orchestrus/Orchestrus/bin/Debug/netcoreapp3.1/Orchestrus
+            - Orchestrus/DBManager/bin/Debug/netcoreapp3.1/DBManager
+            - Orchestrus/WorkerApp/bin/Debug/netcoreapp3.1/WorkerApp
+            - Orchestrus/Test/bin/Debug/netcoreapp3.1/DBManagerTest
+            - Orchestrus/Test/bin/Debug/netcoreapp3.1/OrchestrusTest
+            - Orchestrus/Test/bin/Debug/netcoreapp3.1/WorkerAppTest
+            - Orchestrus/Test/Test.csproj
+
+code_quality:
+  stage: codeQual
+  artifacts:
+    expire_in: 6 mos
+    expose_as: 'Code Quality Report'
+    paths: [gl-code-quality-report.json]
+
+Test:
+    image: tiangolo/docker-with-compose
+    stage: tests
+    script:
+        - docker-compose up -d --scale client=0
+        - cd Orchestrus/WorkerApp
+        - docker-compose up -d
+        - cd -
+        - cd Orchestrus/Test
+        - dotnet test Test.csproj
